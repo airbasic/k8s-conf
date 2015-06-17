@@ -1,0 +1,33 @@
+apiVersion: v1beta3
+kind: ReplicationController
+metadata:
+  labels:
+    name: jekyll
+  name: jekyll
+spec:
+  replicas: 1
+  selector:
+    name: jekyll
+  template:
+    metadata:
+      labels:
+        name: jekyll
+    spec:
+      containers:
+      - capabilities: {}
+        image: qdco.chinacloudapp.cn:5000/jekyll:20150609
+        imagePullPolicy: IfNotPresent
+        name: jekyll
+        ports:
+        - containerPort: 4000
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /srv/jekyll
+          name: site-home
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        jekyll: "true"
+      volumes:
+      - hostPath:
+          path: /mnt/resource/jekyll
+        name: site-home

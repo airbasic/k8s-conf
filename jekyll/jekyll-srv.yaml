@@ -1,0 +1,19 @@
+apiVersion: v1beta3
+kind: Service
+metadata:
+  labels:
+    name: jekyll
+  name: jekyll
+spec:
+  ports:
+  - name: "web"
+    port: 4000
+    protocol: TCP
+    targetPort: 4000
+  publicIPs:
+  - 172.18.0.13
+  - 172.18.0.14
+  - 172.18.0.21
+  - 172.18.0.22
+  selector:
+    name: jekyll

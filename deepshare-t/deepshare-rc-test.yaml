@@ -1,0 +1,45 @@
+apiVersion: v1beta3
+kind: ReplicationController
+metadata:
+  labels:
+    name: deepshare-test
+  name: deepshare-controller-test
+spec:
+  replicas: 1
+  selector:
+    name: deepshare-test
+  template:
+    metadata:
+      labels:
+        app: deepshare-test
+        name: deepshare-test
+        uses: redis-master-test
+    spec:
+      containers:
+      - capabilities: {}
+        env:
+        - name: _DEEPSHARE_URL_BASE_HOST
+          value: http://fds.so
+        - name: _DEEPSHARE_URL_BASE_PORT
+          value: "8081"
+        image: qdco.chinacloudapp.cn:5000/deepshare:20150608
+        imagePullPolicy: IfNotPresent
+        name: deepshare-test
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8000
+          protocol: TCP
+        resources: {}
+        volumeMounts:
+        - mountPath: /tmp
+          name: logfile
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        deepshare: "test"
+      restartPolicy: Always
+      volumes:
+      - awsElasticBlockStore: null
+        hostPath:
+          path: /tmp/log
+        name: logfile

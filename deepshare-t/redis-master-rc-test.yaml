@@ -1,0 +1,41 @@
+apiVersion: v1beta3
+kind: ReplicationController
+metadata:
+  labels:
+    name: redis-master-test
+  name: redis-master-controller-test
+spec:
+  replicas: 1
+  selector:
+    name: redis-master-test
+  template:
+    metadata:
+      labels:
+        app: redis-test
+        name: redis-master-test
+    spec:
+      containers:
+      - capabilities: {}
+        image: qdco.chinacloudapp.cn:5000/redis
+        imagePullPolicy: IfNotPresent
+        name: redis-master-test
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /redis-data
+          name: redis-data-test
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        redis: "test"
+      restartPolicy: Always
+      volumes:
+      - awsElasticBlockStore: null
+        emptyDir: null
+        gcePersistentDisk: null
+        gitRepo: null
+        glusterfs: null
+        hostPath:
+          path: /mnt/resource/redis-test
+        iscsi: null
+        name: redis-data-test

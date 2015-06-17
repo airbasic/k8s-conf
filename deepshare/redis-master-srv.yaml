@@ -1,0 +1,14 @@
+apiVersion: v1beta3
+kind: Service
+metadata:
+  labels:
+    name: redis-master
+  name: redis-master
+spec:
+  ports:
+  - name: ""
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+  selector:
+    name: redis-master

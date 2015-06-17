@@ -1,0 +1,43 @@
+apiVersion: v1beta3
+kind: ReplicationController
+metadata:
+  labels:
+    name: deepshare
+  name: deepshare-controller-rolling
+spec:
+  replicas: 2
+  selector:
+    name: deepshare-rolling
+  template:
+    metadata:
+      labels:
+        app: deepshare
+        name: deepshare-rolling
+        uses: redis-master
+    spec:
+      containers:
+      - capabilities: {}
+        env:
+        - name: _DEEPSHARE_URL_BASE_HOST
+          value: http://fds.so
+        - name: _DEEPSHARE_URL_BASE_PORT
+          value: "8080"
+        image: qdco.chinacloudapp.cn:5000/deepshare:20150612
+        imagePullPolicy: IfNotPresent
+        name: deepshare
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8000
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /tmp
+          name: logfile
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        deepshare: "true"
+      restartPolicy: Always
+      volumes:
+      - hostPath:
+          path: /tmp/log
+        name: logfile

@@ -1,0 +1,19 @@
+apiVersion: v1beta3
+kind: Service
+metadata:
+  labels:
+    name: registry2
+  name: registry2
+spec:
+  ports:
+  - name: "web"
+    port: 5000
+    protocol: TCP
+    targetPort: 5000
+  publicIPs:
+  - 172.18.0.13
+  - 172.18.0.14
+  - 172.18.0.21
+  - 172.18.0.22
+  selector:
+    name: registry2

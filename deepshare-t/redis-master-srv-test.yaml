@@ -1,0 +1,16 @@
+apiVersion: v1beta3
+kind: Service
+metadata:
+  labels:
+    name: redis-master-test
+  name: redis-master-test
+spec:
+  ports:
+  - name: ""
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+  selector:
+    name: redis-master-test
+  sessionAffinity: None
+status: {}

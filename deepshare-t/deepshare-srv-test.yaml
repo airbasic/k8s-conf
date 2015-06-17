@@ -1,0 +1,25 @@
+apiVersion: v1beta3
+kind: Service
+metadata:
+  labels:
+    name: deepshare-test
+  name: deepshare-test
+spec:
+  ports:
+  - name: "web"
+    port: 8081
+    protocol: TCP
+    targetPort: 8080
+  - name: "web-8001"
+    port: 8001
+    protocol: TCP
+    targetPort: 8000
+  publicIPs:
+  - 172.18.0.13
+  - 172.18.0.14
+  - 172.18.0.21
+  - 172.18.0.22
+  selector:
+    app: deepshare-test
+status: {}
+
