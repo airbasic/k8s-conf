@@ -2,8 +2,8 @@ apiVersion: v1beta3
 kind: Service
 metadata:
   labels:
-    name: registry2
-  name: registry2
+    name: registry2-azure
+  name: registry2-azure
 spec:
   ports:
   - name: "web"
@@ -15,5 +15,9 @@ spec:
   - 172.18.0.14
   - 172.18.0.21
   - 172.18.0.22
+  - 172.18.0.20
+  - 172.18.0.28
+  - 172.18.0.29
+  - 172.18.0.30
   selector:
-    name: registry2
+    name: registry2-azure

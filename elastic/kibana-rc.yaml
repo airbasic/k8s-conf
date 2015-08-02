@@ -1,29 +1,40 @@
-apiVersion: v1beta1
-kind:  ReplicationController
-id: kibana-logging-controller
-desiredState:
-  replicas: 1
-  replicaSelector:
+apiVersion: v1beta3
+kind: ReplicationController
+metadata:
+  labels:
+    kubernetes.io/cluster-service: "true"
     name: kibana-logging
-  podTemplate:
-    desiredState:
-      manifest:
-        version: v1beta1
-        id: kibana-viewer
-        containers:
-          - name: kibana-logging
-            image: qdco.chinacloudapp.cn:5000/kibana:1.2
-            env: 
-              - name: "ES_SCHEME"
-                value: "http"
-              - name: "ES_HOST"
-                value: "\"+window.location.hostname+\":9200"
-            ports:
-              - name: kibana-port
-                containerPort: 80
-    labels:
-      name: kibana-logging
-      kubernetes.io/cluster-service: "true"
-labels:
-  name: kibana-logging
-  kubernetes.io/cluster-service: "true"
+  name: kibana-logging-controller
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    name: kibana-logging
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        kubernetes.io/cluster-service: "true"
+        name: kibana-logging
+    spec:
+      containers:
+      - capabilities: {}
+        env:
+        - name: ES_SCHEME
+          value: http
+        - name: ES_HOST
+          value: '"+window.location.hostname+":9200'
+        image: r.fds.so:5000/kibana:1.2
+        imagePullPolicy: IfNotPresent
+        name: kibana-logging
+        ports:
+        - containerPort: 80
+          name: kibana-port
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        env: "20150710"
+      restartPolicy: Always
+      volumes: null

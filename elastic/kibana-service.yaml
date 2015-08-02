@@ -3,7 +3,7 @@ kind: Service
 id: kibana-logging
 containerPort: 80
 port: 5601
-publicIPs: [172.18.0.13, 172.18.0.14, 172.18.0.21, 172.18.0.22]
+publicIPs: [172.18.0.13, 172.18.0.14, 172.18.0.21, 172.18.0.22, 172.18.0.20, 172.18.0.28, 172.18.0.29, 172.18.0.30]
 labels:
   name: kibana-logging
   kubernetes.io/cluster-service: "true"

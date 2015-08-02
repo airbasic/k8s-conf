@@ -3,7 +3,7 @@
   "kind": "ReplicationController",
   "apiVersion": "v1beta1",
   "desiredState": {
-    "replicas": 1,
+    "replicas": 2,
     "replicaSelector": {"name": "ss"},
     "podTemplate": {
       "desiredState": {
@@ -12,11 +12,11 @@
            "id": "ss-controller",
            "containers": [{
              "name": "ss",
-             "image": "qdco.chinacloudapp.cn:5000/ss:1.0",
+             "image": "r.fds.so:5000/ss:2.0",
              "ports": [{"containerPort": 1080}]
            },{
              "name": "polipo",
-             "image": "qdco.chinacloudapp.cn:5000/polipo:1.0",
+             "image": "r.fds.so:5000/polipo:1.0",
              "ports": [{"containerPort": 8123}]
            }]
          }

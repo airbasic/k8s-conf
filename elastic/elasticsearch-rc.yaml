@@ -1,33 +1,51 @@
-apiVersion: v1beta1
+apiVersion: v1beta3
 kind: ReplicationController
-id: elasticsearch-logging-controller
-desiredState:
-  replicas: 1
-  replicaSelector:
+metadata:
+  labels:
+    kubernetes.io/cluster-service: "true"
     name: elasticsearch-logging
-  podTemplate:
-    desiredState:
-      manifest:
-        version: v1beta1
-        id: es-log-ingestion
-        containers:
-          - name: elasticsearch-logging
-            image: qdco.chinacloudapp.cn:5000/elasticsearch:1.1
-            ports:
-              - name: es-port
-                containerPort: 9200
-              - name: es-transport-port
-                containerPort: 9300
-            volumeMounts:
-              - name: es-persistent-storage
-                mountPath: /data
-        volumes:
-          - name: es-persistent-storage
-            source:
-              emptyDir: {}
-    labels:
-      name: elasticsearch-logging
-      kubernetes.io/cluster-service: "true"
-labels:
-  name: elasticsearch-logging
-  kubernetes.io/cluster-service: "true"
+  name: elasticsearch-logging-controller
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    name: elasticsearch-logging
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        kubernetes.io/cluster-service: "true"
+        name: elasticsearch-logging
+    spec:
+      containers:
+      - capabilities: {}
+        image: r.fds.so:5000/elasticsearch:1.1
+        imagePullPolicy: IfNotPresent
+        name: elasticsearch-logging
+        ports:
+        - containerPort: 9200
+          name: es-port
+          protocol: TCP
+        - containerPort: 9300
+          name: es-transport-port
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        volumeMounts:
+        - mountPath: /data
+          name: es-persistent-storage
+        - mountPath: /backups
+          name: es-backups
+      dnsPolicy: ClusterFirst
+      nodeSelector:
+        elastic: "true"
+      restartPolicy: Always
+      volumes:
+      - awsElasticBlockStore: null
+        emptyDir: null
+        name: es-persistent-storage
+      - awsElasticBlockStore: null
+        emptyDir: null
+        hostPath:
+          path: /backups/backups
+        name: es-backups

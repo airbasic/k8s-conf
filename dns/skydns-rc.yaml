@@ -1,48 +1,59 @@
+apiVersion: v1beta3
 kind: ReplicationController
-apiVersion: v1beta1
-id: kube-dns
-namespace: default
-labels:
-  k8s-app: kube-dns
-  kubernetes.io/cluster-service: "true"
-desiredState:
-  replicas: 1
-  replicaSelector:
+metadata:
+  labels:
     k8s-app: kube-dns
-  podTemplate:
-    labels:
-      name: kube-dns
-      k8s-app: kube-dns
-      kubernetes.io/cluster-service: "true"
-    desiredState:
-      manifest:
-        version: v1beta2
-        id: kube-dns
-        dnsPolicy: "Default"  # Don't use cluster DNS.
-        containers:
-          - name: etcd
-            image: qdco.chinacloudapp.cn:5000/etcd:v2.0.3
-            command: [
-                    # entrypoint = "/etcd",
-                    "-listen-client-urls=http://0.0.0.0:2379,http://0.0.0.0:4001",
-                    "-initial-cluster-token=skydns-etcd",
-                    "-advertise-client-urls=http://127.0.0.1:4001",
-            ]
-          - name: kube2sky
-            image: qdco.chinacloudapp.cn:5000/kube2sky:1.1
-            command: [
-                    # entrypoint = "/kube2sky",
-                    "-domain=kube.local",
-            ]
-          - name: skydns
-            image: qdco.chinacloudapp.cn:5000/skydns:2015-03-11-001
-            command: [
-                    # entrypoint = "/skydns",
-                    "-machines=http://localhost:4001",
-                    "-addr=0.0.0.0:53",
-                    "-domain=kube.local.",
-            ]
-            ports:
-              - name: dns
-                containerPort: 53
-                protocol: UDP
+    kubernetes.io/cluster-service: "true"
+  name: kube-dns
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    k8s-app: kube-dns
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s-app: kube-dns
+        kubernetes.io/cluster-service: "true"
+        name: kube-dns
+    spec:
+      containers:
+      - args:
+        - -listen-client-urls=http://0.0.0.0:2379,http://0.0.0.0:4001
+        - -initial-cluster-token=skydns-etcd
+        - -advertise-client-urls=http://127.0.0.1:4001
+        capabilities: {}
+        image: r.fds.so:5000/etcd:v2.0.3
+        imagePullPolicy: IfNotPresent
+        name: etcd
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+      - args:
+        - -domain=kube.local
+        capabilities: {}
+        image: r.fds.so:5000/kube2sky:1.1
+        imagePullPolicy: IfNotPresent
+        name: kube2sky
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+      - args:
+        - -machines=http://localhost:4001
+        - -addr=0.0.0.0:53
+        - -domain=kube.local.
+        capabilities: {}
+        image: r.fds.so:5000/skydns:2015-03-11-001
+        imagePullPolicy: IfNotPresent
+        name: skydns
+        ports:
+        - containerPort: 53
+          name: dns
+          protocol: UDP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: Default
+      nodeSelector:
+        env: "20150710"
+      restartPolicy: Always
+      volumes: null
+

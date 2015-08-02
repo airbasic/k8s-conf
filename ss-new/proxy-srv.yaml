@@ -2,18 +2,16 @@ apiVersion: v1beta3
 kind: Service
 metadata:
   labels:
-    name: deepshare
-  name: deepshare
+    name: ss
+  name: ss
+  namespace: default
 spec:
+  portalIP: 10.1.145.240
   ports:
-  - name: "web"
-    port: 8080
+  - name: ""
+    port: 8123
     protocol: TCP
-    targetPort: 8080
-  - name: "web-8000"
-    port: 8000
-    protocol: TCP
-    targetPort: 8000
+    targetPort: 8123
   publicIPs:
   - 172.18.0.13
   - 172.18.0.14
@@ -22,4 +20,4 @@ spec:
   - 172.18.0.20
   - 172.18.0.28
   selector:
-    app: deepshare
+    name: ss

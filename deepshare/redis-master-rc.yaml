@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - capabilities: {}
-        image: qdco.chinacloudapp.cn:5000/redis
+        image: r.fds.so:5000/redis
         imagePullPolicy: IfNotPresent
         name: redis-master
         ports:
@@ -27,7 +27,7 @@ spec:
           name: redis-data
       dnsPolicy: ClusterFirst
       nodeSelector:
-        redis: "true"
+        redis: "production"
       restartPolicy: Always
       volumes:
       - awsElasticBlockStore: null

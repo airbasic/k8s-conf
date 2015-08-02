@@ -1,0 +1,32 @@
+apiVersion: v1beta3
+kind: ReplicationController
+metadata:
+  labels:
+    name: ss
+  name: ss-controller
+spec:
+  replicas: 2
+  selector:
+    name: ss
+  template:
+    metadata:
+      labels:
+        name: ss
+    spec:
+      containers:
+      - capabilities: {}
+        image: r.fds.so:5000/ss:2.0
+        imagePullPolicy: IfNotPresent
+        name: ss
+        ports:
+        - containerPort: 1080
+          protocol: TCP
+      - capabilities: {}
+        image: r.fds.so:5000/polipo:1.0
+        imagePullPolicy: IfNotPresent
+        name: polipo
+        ports:
+        - containerPort: 8123
+          protocol: TCP
+      nodeSelector:
+        ss: "true"

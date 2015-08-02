@@ -2,24 +2,26 @@ apiVersion: v1beta3
 kind: ReplicationController
 metadata:
   labels:
-    name: registry2
-  name: registry2
+    name: registry2-azure
+  name: registry2-azure
 spec:
   replicas: 1
   selector:
-    name: registry2
+    name: registry2-azure
   template:
     metadata:
       labels:
-        name: registry2
+        name: registry2-azure
     spec:
       containers:
       - capabilities: {}
-        image: qdco.chinacloudapp.cn:5000/registry-azure:20150615
+        image: r.fds.so:5000/registry-azure:20150615
         imagePullPolicy: IfNotPresent
-        name: registry2
+        name: registry2-azure
         ports:
         - containerPort: 5000
           protocol: TCP
       dnsPolicy: ClusterFirst
+      nodeSelector:
+        env: "20150710"
       restartPolicy: Always
