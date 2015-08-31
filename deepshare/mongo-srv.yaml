@@ -1,0 +1,14 @@
+apiVersion: v1beta3
+kind: Service
+metadata:
+  labels:
+    name: mongo
+  name: mongo
+spec:
+  ports:
+  - name: ""
+    port: 27017
+    protocol: TCP
+    targetPort: 27017
+  selector:
+    name: mongo
