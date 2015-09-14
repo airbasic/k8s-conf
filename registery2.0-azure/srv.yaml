@@ -1,4 +1,4 @@
-apiVersion: v1beta3
+apiVersion: v1
 kind: Service
 metadata:
   labels:
@@ -10,14 +10,7 @@ spec:
     port: 5000
     protocol: TCP
     targetPort: 5000
-  publicIPs:
-  - 172.18.0.13
-  - 172.18.0.14
-  - 172.18.0.21
-  - 172.18.0.22
-  - 172.18.0.20
-  - 172.18.0.28
-  - 172.18.0.29
-  - 172.18.0.30
+    nodePort: 30050
+  type: NodePort
   selector:
     name: registry2-azure

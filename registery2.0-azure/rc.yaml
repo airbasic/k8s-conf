@@ -1,9 +1,11 @@
-apiVersion: v1beta3
+apiVersion: v1
 kind: ReplicationController
 metadata:
+  generation: 1
   labels:
     name: registry2-azure
   name: registry2-azure
+  namespace: default
 spec:
   replicas: 1
   selector:
@@ -14,14 +16,10 @@ spec:
         name: registry2-azure
     spec:
       containers:
-      - capabilities: {}
-        image: r.fds.so:5000/registry-azure:20150615
-        imagePullPolicy: IfNotPresent
+      - image: r.fds.so:5000/registry-azure:20150615
         name: registry2-azure
         ports:
         - containerPort: 5000
           protocol: TCP
-      dnsPolicy: ClusterFirst
       nodeSelector:
-        env: "20150710"
-      restartPolicy: Always
+        env: production

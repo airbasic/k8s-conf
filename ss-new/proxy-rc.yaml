@@ -1,11 +1,11 @@
-apiVersion: v1beta3
+apiVersion: v1
 kind: ReplicationController
 metadata:
   labels:
     name: ss
   name: ss-controller
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     name: ss
   template:
@@ -29,4 +29,4 @@ spec:
         - containerPort: 8123
           protocol: TCP
       nodeSelector:
-        ss: "true"
+        env: "test"
