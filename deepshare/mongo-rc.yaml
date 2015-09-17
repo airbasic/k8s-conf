@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - capabilities: {}
-        image: mongo
+        image: r.fds.so:5000/mongo
         imagePullPolicy: IfNotPresent
         name: mongo
         ports:
@@ -27,7 +27,8 @@ spec:
           name: redis-data
       dnsPolicy: ClusterFirst
       nodeSelector:
-        redis: "production"
+        env: "production"
+        mongo: "production"
       restartPolicy: Always
       volumes:
       - awsElasticBlockStore: null

@@ -1,10 +1,10 @@
-apiVersion: v1beta3
+apiVersion: v1
 kind: ReplicationController
 metadata:
   labels:
     kubernetes.io/cluster-service: "true"
     name: elasticsearch-logging
-  name: elasticsearch-logging-controller
+  name: ela-controller
   namespace: default
 spec:
   replicas: 1
@@ -12,7 +12,6 @@ spec:
     name: elasticsearch-logging
   template:
     metadata:
-      creationTimestamp: null
       labels:
         kubernetes.io/cluster-service: "true"
         name: elasticsearch-logging
@@ -20,25 +19,21 @@ spec:
       containers:
       - capabilities: {}
         image: r.fds.so:5000/elasticsearch:1.1
-        imagePullPolicy: IfNotPresent
         name: elasticsearch-logging
         ports:
         - containerPort: 9200
           name: es-port
           protocol: TCP
         - containerPort: 9300
-          name: es-transport-port
+          name: es-port1
           protocol: TCP
-        resources: {}
-        terminationMessagePath: /dev/termination-log
         volumeMounts:
         - mountPath: /data
           name: es-persistent-storage
         - mountPath: /backups
           name: es-backups
-      dnsPolicy: ClusterFirst
       nodeSelector:
-        elastic: "true"
+        env: "production"
       restartPolicy: Always
       volumes:
       - awsElasticBlockStore: null

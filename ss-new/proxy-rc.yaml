@@ -29,4 +29,4 @@ spec:
         - containerPort: 8123
           protocol: TCP
       nodeSelector:
-        env: "test"
+        env: "production"

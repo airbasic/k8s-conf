@@ -17,12 +17,15 @@ spec:
       containers:
       - capabilities: {}
         env:
-        - name: ELASTICSEARCH_URL
-          value: http://k8s-fl-2e70e0aedce405.chinacloudapp.cn:9200
-        image: r.fds.so:5000/kibana:4.1.2
+        - name: ES_SCHEME
+          value: http
+        - name: ES_HOST
+          value: '"+window.location.hostname+":9200'
+        image: r.fds.so:5000/kibana:1.2
+        imagePullPolicy: IfNotPresent
         name: kibana-logging
         ports:
-        - containerPort: 5601
+        - containerPort: 80
           name: kibana-port
           protocol: TCP
       nodeSelector:

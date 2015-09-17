@@ -16,18 +16,19 @@ spec:
     spec:
       containers:
       - capabilities: {}
-        image: redis
+        image: r.fds.so:5000/redis
         imagePullPolicy: IfNotPresent
         name: redis-master
         ports:
         - containerPort: 6379
           protocol: TCP
         volumeMounts:
-        - mountPath: /data
+        - mountPath: /redis-data
           name: redis-data
       dnsPolicy: ClusterFirst
       nodeSelector:
-        redis: "production"
+        env: "production"
+        redis: "master"
       restartPolicy: Always
       volumes:
       - awsElasticBlockStore: null
