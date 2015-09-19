@@ -15,10 +15,9 @@ spec:
         name: kibana-logging
     spec:
       containers:
-      - capabilities: {}
-        env:
+      - env:
         - name: ELASTICSEARCH_URL
-          value: http://k8s-fl-2e70e0aedce405.chinacloudapp.cn:9200
+          value: http://k8s-fl-4626982f4d04ab.chinacloudapp.cn:9200
         image: r.fds.so:5000/kibana:4.1.2
         name: kibana-logging
         ports:

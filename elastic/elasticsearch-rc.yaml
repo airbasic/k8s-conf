@@ -17,8 +17,7 @@ spec:
         name: elasticsearch-logging
     spec:
       containers:
-      - capabilities: {}
-        image: r.fds.so:5000/elasticsearch:1.1
+      - image: r.fds.so:5000/elasticsearch:1.1
         name: elasticsearch-logging
         ports:
         - containerPort: 9200

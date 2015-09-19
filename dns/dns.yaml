@@ -1,22 +1,45 @@
 apiVersion: v1
-kind: ReplicationController
+kind: Service
 metadata:
-  name: kube-dns-v8
+  name: kube-dns
   namespace: default
   labels:
     k8s-app: kube-dns
-    version: v8
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "KubeDNS"
+spec:
+  selector:
+    k8s-app: kube-dns
+  clusterIP: 10.100.0.53
+  ports:
+  - name: dns
+    port: 53
+    protocol: UDP
+  - name: dns-tcp
+    port: 53
+    protocol: TCP
+
+---
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: kube-dns-v9
+  namespace: default
+  labels:
+    k8s-app: kube-dns
+    version: v9
     kubernetes.io/cluster-service: "true"
 spec:
   replicas: 1
   selector:
     k8s-app: kube-dns
-    version: v8
+    version: v9
   template:
     metadata:
       labels:
         k8s-app: kube-dns
-        version: v8
+        version: v9
         kubernetes.io/cluster-service: "true"
     spec:
       containers:
@@ -47,6 +70,7 @@ spec:
             memory: 50Mi
         args:
         # command = "/kube2sky"
+        - --kube_master_url=http://master:8080
         - -domain=kube.local
       - name: skydns
         image: r.fds.so:5000/skydns:2015-03-11-001
@@ -73,6 +97,13 @@ spec:
             scheme: HTTP
           initialDelaySeconds: 30
           timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 1
+          timeoutSeconds: 5
       - name: healthz
         image: r.fds.so:5000/exechealthz:1.0
         resources:
@@ -88,4 +119,4 @@ spec:
       volumes:
       - name: etcd-storage
         emptyDir: {}
-      dnsPolicy: Default  # Don't use cluster DNS.
+      dnsPolicy: Default

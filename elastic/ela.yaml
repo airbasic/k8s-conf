@@ -66,3 +66,53 @@ spec:
       - name: apiserver-secret
         secret:
           secretName: apiserver-secret
+
+---
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: kibana-logging
+  name: kibana-controller
+spec:
+  replicas: 1
+  selector:
+    name: kibana-logging
+  template:
+    metadata:
+      labels:
+        kubernetes.io/cluster-service: "true"
+        name: kibana-logging
+    spec:
+      containers:
+      - image: r.fds.so:5000/kibana:4.1.2
+        env:
+        - name: ELASTICSEARCH_URL
+          value: http://k8s-fl-4626982f4d04ab.chinacloudapp.cn:9200
+        name: kibana-logging
+        ports:
+        - containerPort: 5601
+          name: kibana-port
+          protocol: TCP
+      nodeSelector:
+        env: "production"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: kibana
+  name: kibana
+spec:
+  ports:
+  - name: ""
+    port: 5601
+    protocol: TCP
+    targetPort: 5601
+    nodePort: 30601
+  type: NodePort
+  selector:
+    name: kibana-logging
