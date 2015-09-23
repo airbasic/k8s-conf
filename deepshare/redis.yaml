@@ -1,4 +1,21 @@
 apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: redis-master
+  name: redis-master
+spec:
+  ports:
+  - name: ""
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+  selector:
+    name: redis-master
+
+---
+
+apiVersion: v1
 kind: ReplicationController
 metadata:
   labels:
@@ -15,24 +32,21 @@ spec:
         name: redis-master
     spec:
       containers:
-      - capabilities: {}
-        image: r.fds.so:5000/redis
-        imagePullPolicy: IfNotPresent
+      - image: r.fds.so:5000/redis
         name: redis-master
         ports:
         - containerPort: 6379
           protocol: TCP
         volumeMounts:
+        - mountPath: /redis
+          name: redis-conf
         - mountPath: /redis-data
           name: redis-data
-      dnsPolicy: ClusterFirst
-      nodeSelector:
-        env: "production"
-        redis: "master"
-      restartPolicy: Always
+      nodeName: 172.18.0.5
       volumes:
-      - awsElasticBlockStore: null
-        emptyDir: null
-        hostPath:
+      - hostPath:
+          path: /mnt/resource/redis
+        name: redis-conf
+      - hostPath:
           path: /mnt/resource/redis
         name: redis-data

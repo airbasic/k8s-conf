@@ -20,6 +20,8 @@ spec:
         limits:
           cpu: "0.1"
       volumeMounts:
+        - mountPath: /redis-master
+          name: conf
         - mountPath: /redis-master-data
           name: data
     - name: sentinel
@@ -29,9 +31,11 @@ spec:
           value: "true"
       ports:
         - containerPort: 26379
-  nodeSelector:
-    kubernetes.io/hostname: 172.18.0.5
+  nodeName: 172.18.0.5
   volumes:
+    - name: conf
+      hostPath:
+        path: /mnt/resource/redis
     - name: data
       hostPath:
         path: /mnt/resource/redis

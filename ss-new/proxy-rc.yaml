@@ -5,7 +5,7 @@ metadata:
     name: ss
   name: ss-controller
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     name: ss
   template:

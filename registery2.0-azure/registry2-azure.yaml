@@ -16,10 +16,28 @@ spec:
         name: registry2-azure
     spec:
       containers:
-      - image: r.fds.so:5000/registry-azure:20150615
+      - image: kevinliuzhong/registry-azure:20150615
         name: registry2-azure
         ports:
         - containerPort: 5000
           protocol: TCP
-      nodeSelector:
-        env: production
+      nodeName: 172.18.0.12
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: registry2-azure
+  name: registry2-azure
+spec:
+  ports:
+  - name: "web"
+    port: 5000
+    protocol: TCP
+    targetPort: 5000
+    nodePort: 30050
+  type: NodePort
+  selector:
+    name: registry2-azure

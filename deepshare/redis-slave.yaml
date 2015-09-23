@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: redis-master
+  name: redis-master
+spec:
+  ports:
+  - name: ""
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+  selector:
+    name: redis-master
+
+---
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: redis-master
+  name: redis-master-controller
+spec:
+  replicas: 1
+  selector:
+    name: redis-master
+  template:
+    metadata:
+      labels:
+        app: redis
+        name: redis-master
+    spec:
+      containers:
+      - image: r.fds.so:5000/redis
+        name: redis-master
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+        args:
+        - --slaveof 42.159.253.111 26379
+        volumeMounts:
+        - mountPath: /redis
+          name: redis-conf
+        - mountPath: /redis-data
+          name: redis-data
+      nodeName: 172.18.0.5
+      volumes:
+      - hostPath:
+          path: /mnt/resource/redis
+        name: redis-conf
+      - hostPath:
+          path: /mnt/resource/redis
+        name: redis-data

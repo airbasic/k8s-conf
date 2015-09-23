@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: deepshare-website
+  name: deepshare-website
+spec:
+  ports:
+  - name: ""
+    port: 8082
+    protocol: TCP
+    targetPort: 8082
+    nodePort: 30082
+  type: NodePort
+  selector:
+    name: deepshare-website
+
+---
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: deepshare-website
+  name: ds-web-controller
+spec:
+  replicas: 1
+  selector:
+    name: deepshare-website
+  template:
+    metadata:
+      labels:
+        name: deepshare-website
+    spec:
+      containers:
+      - image: r.fds.so:5000/dswebserver:20150907
+        name: deepshare-website
+        ports:
+        - containerPort: 8082
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /go/src/github.com/MISingularity/deepshare_website/_site
+          name: website
+      nodeName: 172.18.0.6
+      volumes:
+      - hostPath:
+          path: /mnt/resource/webserver/_site
+        name: website
