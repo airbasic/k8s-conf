@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: deepshare-dataserver
+  name: deepshare-dataserver
+spec:
+  ports:
+  - name: ""
+    port: 8081
+    protocol: TCP
+    targetPort: 8081
+    nodePort: 30881
+  type: NodePort
+  selector:
+    name: deepshare-dataserver
+
+---
+
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    name: deepshare-dataserver
+  name: ds-dataserver-controller
+spec:
+  replicas: 1
+  selector:
+    name: deepshare-dataserver
+  template:
+    metadata:
+      labels:
+        name: deepshare-dataserver
+    spec:
+      containers:
+      - image: r.fds.so:5000/dsdataserver:20150924
+        name: deepshare-dataserver
+        ports:
+        - containerPort: 8081
+          protocol: TCP

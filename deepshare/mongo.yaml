@@ -40,8 +40,6 @@ spec:
         volumeMounts:
         - mountPath: /data/db
           name: mongo-data
-        args:
-        - --replSet=deepshare
       nodeName: 172.18.0.5
       volumes:
       - hostPath:
