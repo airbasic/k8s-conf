@@ -4,10 +4,10 @@ metadata:
   labels:
     name: deepshare
     uses: redis-master
-  name: deepshare-pod2
+  name: deepshare-pod1
   namespace: default
 spec:
-  nodeName: 172.18.0.13
+  nodeName: 172.18.0.12
   containers:
   - env:
     - name: _DEEPSHARE_URL_BASE_HOST

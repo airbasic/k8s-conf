@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    name: mongo
-  name: mongo
+    name: mongo1
+  name: mongo1
 spec:
   ports:
   - name: ""
@@ -11,7 +11,7 @@ spec:
     protocol: TCP
     targetPort: 27017
   selector:
-    name: mongo
+    name: mongo1
 
 ---
 
@@ -19,28 +19,28 @@ apiVersion: v1
 kind: ReplicationController
 metadata:
   labels:
-    name: mongo
-  name: mongo-controller
+    name: mongo1
+  name: mongo-controller1
 spec:
   replicas: 1
   selector:
-    name: mongo
+    name: mongo1
   template:
     metadata:
       labels:
-        app: mongo
-        name: mongo
+        app: mongo1
+        name: mongo1
     spec:
       containers:
       - image: r.fds.so:5000/mongo
-        name: mongo
+        name: mongo1
         ports:
         - containerPort: 27017
           protocol: TCP
         volumeMounts:
         - mountPath: /data/db
           name: mongo-data
-      nodeName: 172.18.0.20
+      nodeName: 172.18.0.5
       volumes:
       - hostPath:
           path: /mnt/resource/mongo

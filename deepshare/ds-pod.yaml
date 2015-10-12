@@ -7,7 +7,7 @@ metadata:
   name: deepshare-pod1
   namespace: default
 spec:
-  nodeName: 172.18.0.5
+  nodeName: 172.18.0.12
   containers:
   - env:
     - name: _DEEPSHARE_URL_BASE_HOST
@@ -23,6 +23,9 @@ spec:
     - containerPort: 8000
       hostPort: 30081
       protocol: TCP
+    - containerPort: 80
+      hostPort: 31080
+      protocol: TCP
 
 ---
 
@@ -33,34 +36,6 @@ metadata:
     name: deepshare
     uses: redis-master
   name: deepshare-pod2
-  namespace: default
-spec:
-  nodeName: 172.18.0.6
-  containers:
-  - env:
-    - name: _DEEPSHARE_URL_BASE_HOST
-      value: http://fds.so
-    - name: _DEEPSHARE_URL_BASE_PORT
-      value: "8080"
-    image: r.fds.so:5000/deepshare:201509191
-    name: deepshare
-    ports:
-    - containerPort: 8080
-      hostPort: 30080
-      protocol: TCP
-    - containerPort: 30081
-      hostPort: 8000
-      protocol: TCP
-
----
-
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    name: deepshare
-    uses: redis-master
-  name: deepshare-pod3
   namespace: default
 spec:
   nodeName: 172.18.0.13
@@ -76,6 +51,40 @@ spec:
     - containerPort: 8080
       hostPort: 30080
       protocol: TCP
+    - containerPort: 30081
+      hostPort: 8000
+      protocol: TCP
+    - containerPort: 80
+      hostPort: 31080
+      protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: deepshare
+    uses: redis-master
+  name: deepshare-pod3
+  namespace: default
+spec:
+  nodeName: 172.18.0.14
+  containers:
+  - env:
+    - name: _DEEPSHARE_URL_BASE_HOST
+      value: http://fds.so
+    - name: _DEEPSHARE_URL_BASE_PORT
+      value: "8080"
+    image: r.fds.so:5000/deepshare:201509191
+    name: deepshare
+    ports:
+    - containerPort: 8080
+      hostPort: 30080
+      protocol: TCP
     - containerPort: 8000
       hostPort: 30081
+      protocol: TCP
+    - containerPort: 80
+      hostPort: 31080
       protocol: TCP

@@ -6,6 +6,11 @@ metadata:
   name: deepshare-ul
 spec:
   ports:
+  - name: "http"
+    port: 80
+    protocol: TCP
+    targetPort: 80
+    nodePort: 31080
   - name: "https"
     port: 443
     protocol: TCP
@@ -33,10 +38,23 @@ spec:
         name: deepshare-ul
     spec:
       containers:
-      - image: r.fds.so:5000/https-server:20150930
+      - image: r.fds.so:5000/https-server:20150925
         name: deepshare-ul
         ports:
+        - containerPort: 80
+          protocol: TCP
         - containerPort: 443
           protocol: TCP
         volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: root
+        - mountPath: /etc/nginx/conf.d
+          name: conf
       nodeName: 172.18.0.13
+      volumes:
+      - hostPath:
+          path: /mnt/resource/https-server/conf
+        name: conf
+      - hostPath:
+          path: /mnt/resource/https-server/html
+        name: root

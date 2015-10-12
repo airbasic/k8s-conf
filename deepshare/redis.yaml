@@ -42,7 +42,7 @@ spec:
           name: redis-conf
         - mountPath: /redis-data
           name: redis-data
-      nodeName: 172.18.0.5
+      nodeName: 172.18.0.20
       volumes:
       - hostPath:
           path: /mnt/resource/redis
