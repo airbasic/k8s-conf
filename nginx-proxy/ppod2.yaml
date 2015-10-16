@@ -3,10 +3,10 @@ kind: Pod
 metadata:
   labels:
     name: proxy
-  name: proxy-pod1
+  name: proxy-pod2
   namespace: default
 spec:
-  nodeName: 172.18.0.20
+  nodeName: 172.18.0.14
   containers:
   - image: r.fds.so:5000/nginx:1.9.5
     name: proxy8080
